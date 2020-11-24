@@ -1,0 +1,110 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/templates/conf-template.xhtml">
+  	<ui:define name="head">:: COVID APP ::</ui:define>
+	<ui:define name="body">
+		<h:body>
+			<h:form>
+			<p:messages id="messages" globalOnly="true" autoUpdate="true"
+						 closable="true" showDetail="true" showSummary="true"/>
+				<div align="center">
+				<br/><br/>
+					<h:outputLabel value="WELCOME "/>#{principal.userAccess}<BR />
+					<h:outputLabel value="TO THE EVENT MANAGEMENT SYSTEM"/>
+				</div>
+				
+				<p:wizard flowListener="#{principal.onFlowProcess}">
+					<p:tab id="dataPerson" title="#{msg.dataPerson}">
+						<p:panel id="personRegisterGrid" header="#{msg.dataRegisterPerson}" style="width:100%;no-border">
+							<div align="center">
+								<p:panelGrid id="personRegisterG" style="no-border" columns="2" cellpadding="5">	
+									<p:outputLabel value="#{msg.documentType}" for="documentTypeD"/>
+									<p:selectOneMenu id="documentTypeD" styleClass="text" style="width:150px;" value="#{principal.newPerson.documentTypeID}">
+										<f:selectItems value="#{principal.documentTypes}" var="documentType" 
+														itemLabel="#{documentType.description}" itemValue="#{documentType.documentTypeID}">
+										</f:selectItems>
+									</p:selectOneMenu>
+									<p:outputLabel value="#{msg.document}" for="doc"/>
+									<p:inputText id="doc" value="#{principal.newPerson.document}" style="width:150px" styleClass="text"/>
+									<p:outputLabel value="#{msg.firstName}" for="name1"/>
+									<p:inputText id="name1" value="#{principal.newPerson.firstName}" style="width:150px;" styleClass="text"/>
+									<p:outputLabel value="#{msg.middleName}" for="name2"/>
+									<p:inputText id="name2" value="#{principal.newPerson.middleName}" style="width:150px;" styleClass="text"/>
+									<p:outputLabel value="#{msg.lastName}" for="lastname1"/>
+									<p:inputText id="lastname1" value="#{principal.newPerson.lastName}" style="width:150px;" styleClass="text"/>
+									<p:outputLabel value="#{msg.lastName2}" for="lastname2"/>
+									<p:inputText id="lastname2" value="#{principal.newPerson.lastName2}" style="width:150px;" styleClass="text"/>
+									<p:outputLabel value="#{msg.birthday}" for="birthday"/>
+									<p:calendar id="birthday" value="#{principal.newPerson.birthday}" pattern="dd-MM-yyyy" style="width:150px;" mask="true"/>
+									<p:outputLabel value="#{msg.birthplace}" for="city"/>
+									<p:selectOneMenu id="city" styleClass="text" style="width:150px;" value="#{principal.newPerson.cityID}">
+										<f:selectItems value="#{principal.cities}" var="cities" itemLabel="#{cities.cityName}" itemValue="#{cities.cityID}">
+										</f:selectItems>
+									</p:selectOneMenu>
+									<p:outputLabel value="#{msg.height}" for="height"/>
+									<p:inputNumber id="height" value="#{principal.newPerson.height}" style="width:150px;" styleClass="text"/>
+									<p:outputLabel value="#{msg.phone}" for="phone"/>
+									<p:inputNumber id="phone" value="#{principal.phone}" mask="999999999"/>
+									<p:outputLabel value="#{msg.email}" for="email"/>
+									<p:inputText id="email" value="#{principal.newPerson.email}" style="width:150px;" styleClass="text"/>
+									<p:outputLabel value="#{msg.rhBlood}" for="rh"/>
+									<p:selectOneMenu id="rh" styleClass="text" style="width:150px;" value="#{principal.newPerson.rhBlood}">
+										<f:selectItems value="#{principal.rhBloodTypes}" var="rh" itemLabel="#{rh.description}" itemValue="#{rh.id}">
+										</f:selectItems>
+									</p:selectOneMenu>
+									<p:outputLabel value="#{msg.gender}" for="gender"/>
+									<p:selectOneRadio id="gender" value="#{principal.newPerson.gender}" unselectable="true">
+										<f:selectItem itemLabel="Female" itemValue="female"/>
+										<f:selectItem itemLabel="Male" itemValue="male"/>
+										<f:selectItem itemLabel="Other" itemValue="other"/>
+									</p:selectOneRadio> 									
+								</p:panelGrid>
+								<div align="center">
+									<p:commandButton value="#{msg.btnCreate}" action="#{principal.createPerson()}" update="@form" ajax="false"/>
+								</div>
+							</div>
+						</p:panel>
+					</p:tab>
+					<p:tab id="dataTemperature" title="#{msg.dataTemperature}">
+						<p:panel id="personTemperature" header="#{msg.dataRegisterPerson}" style="width:100%;no-border">
+							<div align="center">
+								<p:panelGrid id="personTemperatureG" style="no-border" columns="2" cellpadding="5">	
+									<p:outputLabel value="#{msg.document}" for="document"/>
+									<p:inputText id="document" value="#{principal.newPerson.document}" style="width:150px" styleClass="text"/>
+									<p:outputLabel value="#{msg.disease}" for="disease"/>
+									<p:selectOneMenu id="disease" styleClass="text" style="width:150px;" value="#{register.register.diseaseID}">
+										<f:selectItems value="#{register.diseases}" var="diseases" 
+														itemLabel="#{diseases.description}" itemValue="#{diseases.diseaseID}">
+										</f:selectItems>
+									</p:selectOneMenu>
+									<p:outputLabel value="#{msg.company}" for="company"/>
+									<p:selectOneMenu id="company" styleClass="text" style="width:150px;" value="#{register.register.companyID}">
+										<f:selectItems value="#{register.companies}" var="companies" 
+														itemLabel="#{companies.name}" itemValue="#{companies.companyID}">
+										</f:selectItems>
+									</p:selectOneMenu>
+								</p:panelGrid>
+								<div align="center">
+									<p:commandButton value="#{msg.btnSearch}" action="#{register.validatePerson()}" update="dataregister" ajax="false"/>
+								</div>
+								
+								<p:panel id="dataregister" visible="#{register.visiblePanel}" style="width:100%;no-border">
+									<p:outputLabel value="#{msg.weight}" for="weight"/>
+									<p:inputText id="weight" value="#{register.person.weight}" style="width:150px" styleClass="text"/>
+									<p:outputLabel value="#{msg.temperature}" for="temperature"/>
+									<p:inputText id="temperature" value="#{register.register.temperature}" style="width:150px" styleClass="text"/>
+									<div align="center">
+										<p:commandButton value="#{msg.btnAccess}" action="#{register.validatePerson()}" update="dataregister" ajax="false"/>
+									</div>
+								</p:panel>
+							</div>
+						</p:panel>
+					</p:tab>
+				</p:wizard>
+			</h:form>	
+		</h:body>
+	</ui:define>
+</ui:composition> 
